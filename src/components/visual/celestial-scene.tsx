@@ -9,7 +9,11 @@ import {
   useTransform,
 } from "motion/react";
 
+import { SolarCore } from "@/components/visual/solar-core";
 import { cn } from "@/lib/utils";
+
+/** The sun entry is special-cased: it is drawn by a shader, not an image. */
+const SUN_SRC = "/celestial/sun.webp";
 
 export type CelestialVariant =
   "solar" | "saturn" | "neptune" | "moon" | "jupiter";
@@ -26,7 +30,7 @@ interface CelestialBody {
 const SCENES: Record<CelestialVariant, CelestialBody[]> = {
   solar: [
     {
-      src: "/celestial/sun.webp",
+      src: SUN_SRC,
       className:
         "-left-[12%] top-[3%] h-[94%] w-[94%] sm:-left-[8%] lg:-left-[9%]",
       delay: 0,
@@ -154,12 +158,14 @@ export function CelestialScene({
               ease: [0.16, 1, 0.3, 1],
             }}
           >
-            <div
-              className={cn(
-                "absolute inset-[16%] -z-10 rounded-full blur-3xl",
-                body.glow,
-              )}
-            />
+            {body.src !== SUN_SRC && (
+              <div
+                className={cn(
+                  "absolute inset-[16%] -z-10 rounded-full blur-3xl",
+                  body.glow,
+                )}
+              />
+            )}
             <motion.div
               className="relative h-full w-full"
               animate={
@@ -176,65 +182,26 @@ export function CelestialScene({
                 ease: "easeInOut",
               }}
             >
-              {body.src === "/celestial/sun.webp" && <SolarEnergy />}
-              <Image
-                src={body.src}
-                alt=""
-                fill
-                priority={priority && index === 0}
-                sizes="(max-width: 1024px) 90vw, 46vw"
-                className={cn(
-                  "select-none object-contain drop-shadow-[0_30px_55px_rgba(0,0,0,0.5)]",
-                  body.src === "/celestial/sun.webp" && "solar-surface",
-                )}
-              />
-              {body.src === "/celestial/sun.webp" && <SolarFlares />}
+              {body.src === SUN_SRC ? (
+                /* The sun is rendered by a shader rather than an image — see
+                   SolarCore for why the bitmap could not look like fire. */
+                <SolarCore />
+              ) : (
+                <Image
+                  src={body.src}
+                  alt=""
+                  fill
+                  priority={priority && index === 0}
+                  sizes="(max-width: 1024px) 90vw, 46vw"
+                  className="select-none object-contain drop-shadow-[0_30px_55px_rgba(0,0,0,0.5)]"
+                />
+              )}
             </motion.div>
           </motion.div>
         ))}
 
         <Sparkles />
       </motion.div>
-    </div>
-  );
-}
-
-const SOLAR_FLARES = [
-  { left: 50, top: 7, angle: "0deg", delay: "-0.4s" },
-  { left: 79, top: 18, angle: "42deg", delay: "-2.8s" },
-  { left: 93, top: 49, angle: "88deg", delay: "-1.1s" },
-  { left: 81, top: 80, angle: "136deg", delay: "-3.6s" },
-  { left: 50, top: 93, angle: "180deg", delay: "-2s" },
-  { left: 19, top: 80, angle: "224deg", delay: "-4.2s" },
-  { left: 7, top: 50, angle: "270deg", delay: "-1.8s" },
-  { left: 20, top: 18, angle: "318deg", delay: "-3.1s" },
-] as const;
-
-function SolarEnergy() {
-  return (
-    <div className="pointer-events-none absolute inset-[4%] z-0 rounded-full">
-      <div className="solar-radiance absolute inset-[-6%] rounded-full" />
-    </div>
-  );
-}
-
-function SolarFlares() {
-  return (
-    <div className="pointer-events-none absolute inset-[5%] z-2 rounded-full">
-      {SOLAR_FLARES.map((flare, index) => (
-        <span
-          key={index}
-          className="solar-flare absolute"
-          style={
-            {
-              left: `${flare.left}%`,
-              top: `${flare.top}%`,
-              "--flare-angle": flare.angle,
-              animationDelay: flare.delay,
-            } as React.CSSProperties
-          }
-        />
-      ))}
     </div>
   );
 }
