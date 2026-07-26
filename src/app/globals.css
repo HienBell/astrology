@@ -196,6 +196,89 @@
     }
   }
 
+  .solar-surface {
+    z-index: 1;
+    animation:
+      solar-surface-turn 110s linear infinite,
+      solar-surface-breathe 5.5s ease-in-out infinite;
+  }
+
+  .solar-radiance {
+    background: radial-gradient(
+      circle,
+      rgb(255 221 112 / 26%) 0 48%,
+      rgb(255 126 24 / 14%) 58%,
+      transparent 76%
+    );
+    filter: blur(22px);
+    animation: solar-radiance 3.4s ease-in-out infinite;
+  }
+
+  .solar-flare {
+    --flare-angle: 0deg;
+    z-index: 2;
+    width: 7%;
+    height: 19%;
+    border-radius: 50% 50% 45% 45%;
+    background: linear-gradient(
+      to top,
+      oklch(0.92 0.2 63 / 8%),
+      oklch(1 0.14 90 / 82%) 52%,
+      transparent 100%
+    );
+    filter: blur(2.8px) drop-shadow(0 0 7px rgb(255 187 55 / 72%));
+    mix-blend-mode: screen;
+    transform: translate(-50%, -50%) rotate(var(--flare-angle)) scaleY(0.35);
+    animation: solar-flare 5.2s ease-in-out infinite;
+  }
+
+  @keyframes solar-surface-turn {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes solar-surface-breathe {
+    0%,
+    100% {
+      filter: brightness(0.96) saturate(1.02);
+    }
+    50% {
+      filter: brightness(1.12) saturate(1.18);
+    }
+  }
+
+  @keyframes solar-radiance {
+    0%,
+    100% {
+      opacity: 0.32;
+      transform: scale(0.96);
+    }
+    50% {
+      opacity: 0.72;
+      transform: scale(1.07);
+    }
+  }
+
+  @keyframes solar-flare {
+    0%,
+    100% {
+      opacity: 0.16;
+      transform: translate(-50%, -50%) rotate(var(--flare-angle)) scaleX(0.6)
+        scaleY(0.3);
+    }
+    45% {
+      opacity: 0.95;
+      transform: translate(-50%, -50%) rotate(var(--flare-angle)) scaleX(1.2)
+        scaleY(1.18);
+    }
+    68% {
+      opacity: 0.48;
+      transform: translate(-50%, -50%) rotate(var(--flare-angle)) scaleX(0.85)
+        scaleY(0.72);
+    }
+  }
+
   ::selection {
     background: oklch(0.83 0.135 84 / 28%);
   }
