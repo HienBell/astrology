@@ -23,19 +23,19 @@ export function SiteHeader({
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-6xl items-center gap-6 px-5">
+      <div className="mx-auto flex h-16 max-w-6xl items-center gap-2 px-4 sm:gap-6 sm:px-5">
         <Link
           href={`/${locale}`}
-          className="group flex items-center gap-2.5"
+          className="group flex shrink-0 items-center gap-2 sm:gap-2.5"
           aria-label={dict.meta.title}
         >
           <AstrolabeMark />
-          <span className="font-heading text-xl font-semibold tracking-wide text-gradient-gold">
+          <span className="whitespace-nowrap font-heading text-lg font-semibold tracking-wide text-gradient-gold sm:text-xl">
             Thiên Đồ
           </span>
         </Link>
 
-        <nav className="ml-auto flex items-center gap-1">
+        <nav className="ml-auto flex min-w-0 items-center gap-0.5 sm:gap-1">
           {links.map((link) => {
             const active =
               link.href === `/${locale}`
@@ -47,7 +47,7 @@ export function SiteHeader({
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "rounded-full px-3.5 py-1.5 text-sm transition-colors",
+                  "whitespace-nowrap rounded-full px-2 py-1.5 text-xs transition-colors sm:px-3.5 sm:text-sm",
                   active
                     ? "bg-accent/60 text-foreground"
                     : "text-muted-foreground hover:text-foreground",
@@ -73,10 +73,29 @@ function AstrolabeMark() {
       fill="none"
       aria-hidden
     >
-      <circle cx="16" cy="16" r="13" stroke="currentColor" strokeWidth="1" opacity="0.55" />
-      <circle cx="16" cy="16" r="8.5" stroke="currentColor" strokeWidth="0.8" opacity="0.8" />
+      <circle
+        cx="16"
+        cy="16"
+        r="13"
+        stroke="currentColor"
+        strokeWidth="1"
+        opacity="0.55"
+      />
+      <circle
+        cx="16"
+        cy="16"
+        r="8.5"
+        stroke="currentColor"
+        strokeWidth="0.8"
+        opacity="0.8"
+      />
       <circle cx="16" cy="16" r="2" fill="currentColor" />
-      <path d="M16 3v26M3 16h26" stroke="currentColor" strokeWidth="0.6" opacity="0.35" />
+      <path
+        d="M16 3v26M3 16h26"
+        stroke="currentColor"
+        strokeWidth="0.6"
+        opacity="0.35"
+      />
       <path
         d="M16 3.2 22.6 16 16 28.8 9.4 16Z"
         stroke="currentColor"

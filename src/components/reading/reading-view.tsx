@@ -39,6 +39,7 @@ export function ReadingView({
         <p className="mb-5 text-muted-foreground">{dict.profile.empty}</p>
         <Button
           className="rounded-full"
+          nativeButton={false}
           render={<Link href={`/${locale}`}>{dict.nav.newChart}</Link>}
         />
       </CentredNote>

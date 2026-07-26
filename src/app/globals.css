@@ -155,6 +155,47 @@
     background-attachment: fixed;
   }
 
+  .universe-nebula {
+    background:
+      radial-gradient(
+        ellipse 55% 42% at 18% 18%,
+        oklch(0.43 0.16 285 / 18%),
+        transparent 72%
+      ),
+      radial-gradient(
+        ellipse 48% 38% at 82% 72%,
+        oklch(0.4 0.13 225 / 14%),
+        transparent 75%
+      );
+  }
+
+  .universe-vignette {
+    background: radial-gradient(
+      ellipse at center,
+      transparent 38%,
+      oklch(0.07 0.025 278 / 45%) 100%
+    );
+  }
+
+  .celestial-spark {
+    box-shadow:
+      0 0 7px 2px oklch(1 0 0 / 55%),
+      0 0 20px 5px oklch(0.8 0.08 245 / 22%);
+    animation: celestial-spark 4.5s ease-in-out infinite;
+  }
+
+  @keyframes celestial-spark {
+    0%,
+    100% {
+      opacity: 0.18;
+      transform: scale(0.55);
+    }
+    48% {
+      opacity: 1;
+      transform: scale(1.5);
+    }
+  }
+
   ::selection {
     background: oklch(0.83 0.135 84 / 28%);
   }
@@ -225,7 +266,8 @@
 }
 
 @utility glow-gold {
-  box-shadow: 0 0 0 1px oklch(0.83 0.135 84 / 30%),
+  box-shadow:
+    0 0 0 1px oklch(0.83 0.135 84 / 30%),
     0 0 28px -6px oklch(0.83 0.135 84 / 45%);
 }
 
