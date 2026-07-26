@@ -11,7 +11,8 @@
     "verify:ephemeris": "tsx scripts/verify-ephemeris.mts",
     "verify:reading": "tsx scripts/verify-reading.mts",
     "verify:distribution": "tsx scripts/verify-distribution.mts",
-    "verify:e2e": "tsx scripts/e2e-check.mts"
+    "verify:e2e": "tsx scripts/e2e-check.mts",
+    "verify:visuals": "tsx scripts/verify-visuals.mts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",
