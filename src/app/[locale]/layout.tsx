@@ -73,7 +73,10 @@ export default async function LocaleLayout({
         <Starfield />
         <TooltipProvider delay={200}>
           <SiteHeader dict={dict} locale={locale} />
-          <main className="flex-1">{children}</main>
+          {/* `clip` rather than `hidden`: it contains the oversized celestial
+              art without creating a scroll container, which would break the
+              sticky header. */}
+          <main className="flex-1 overflow-x-clip">{children}</main>
           <SiteFooter dict={dict} />
         </TooltipProvider>
         <Toaster position="bottom-center" />

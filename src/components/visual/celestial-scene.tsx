@@ -31,8 +31,12 @@ const SCENES: Record<CelestialVariant, CelestialBody[]> = {
   solar: [
     {
       src: SUN_SRC,
+      /* The canvas is far larger than the visible disc: only the middle
+         SUN_DISC_FRACTION of it is photosphere, the rest is corona headroom.
+         At these numbers the disc is roughly the height of the scene box and
+         the corona spills past every edge. */
       className:
-        "-left-[12%] top-[3%] h-[94%] w-[94%] sm:-left-[8%] lg:-left-[9%]",
+        "-left-[30%] -top-[32%] h-[164%] w-[164%] sm:-left-[26%] lg:-left-[22%]",
       delay: 0,
       float: 10,
       duration: 9,
@@ -40,7 +44,7 @@ const SCENES: Record<CelestialVariant, CelestialBody[]> = {
     },
     {
       src: "/celestial/moon.webp",
-      className: "right-[1%] top-[7%] h-[24%] w-[24%]",
+      className: "right-[2%] top-[4%] h-[15%] w-[15%]",
       delay: 0.24,
       float: 16,
       duration: 7,
@@ -48,7 +52,7 @@ const SCENES: Record<CelestialVariant, CelestialBody[]> = {
     },
     {
       src: "/celestial/neptune.webp",
-      className: "bottom-[2%] right-[4%] h-[30%] w-[30%]",
+      className: "bottom-[3%] right-[3%] h-[19%] w-[19%]",
       delay: 0.4,
       float: 13,
       duration: 8,
@@ -129,7 +133,7 @@ export function CelestialScene({
       aria-hidden
       data-celestial-scene={variant}
       className={cn(
-        "relative isolate mx-auto h-[310px] w-full max-w-[620px] overflow-visible sm:h-[420px] lg:h-[560px]",
+        "relative isolate mx-auto h-[330px] w-full max-w-[660px] overflow-visible sm:h-[450px] lg:h-[600px]",
         className,
       )}
     >

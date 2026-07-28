@@ -26,7 +26,7 @@ export default async function HomePage({
 
   return (
     <>
-      <section className="mx-auto min-h-[calc(100svh-4rem)] max-w-7xl overflow-hidden px-5 pb-20 pt-12 sm:pt-20 lg:flex lg:items-center">
+      <section className="mx-auto min-h-[calc(100svh-4rem)] max-w-7xl px-5 pb-20 pt-12 sm:pt-20 lg:flex lg:items-center">
         <div className="grid w-full items-center gap-6 lg:grid-cols-[1.08fr_0.92fr] lg:gap-10">
           <div>
             <Reveal>
@@ -71,7 +71,7 @@ export default async function HomePage({
 
       <section
         id="form"
-        className="mx-auto max-w-7xl overflow-hidden px-5 py-20 sm:py-28"
+        className="mx-auto max-w-7xl px-5 py-20 sm:py-28"
       >
         <div className="grid items-center gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-12">
           <CelestialScene variant="saturn" />
@@ -79,7 +79,7 @@ export default async function HomePage({
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl overflow-hidden px-5 pb-8 pt-12">
+      <section className="mx-auto max-w-6xl px-5 pb-8 pt-12">
         <Reveal inView>
           <h2 className="text-center font-heading text-3xl font-semibold">
             {dict.about.title}

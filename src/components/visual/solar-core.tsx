@@ -20,6 +20,14 @@ import { useReducedMotion } from "motion/react";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * Radius of the photosphere as a fraction of the canvas' shorter half-axis.
+ * The remainder of the frame is headroom for the corona and prominences, so
+ * the drawn disc is always smaller than the element that hosts it — callers
+ * sizing the sun against other bodies must divide by this.
+ */
+export const SUN_DISC_FRACTION = 0.56;
+
 const VERTEX_SHADER = /* glsl */ `#version 300 es
 in vec2 aPosition;
 void main() {
@@ -34,9 +42,9 @@ uniform float uTime;
 
 out vec4 fragColor;
 
-/* Radius of the photosphere in normalised units; the rest of the frame is
-   left for the corona to reach into. */
-const float DISC = 0.56;
+/* Injected from SUN_DISC_FRACTION so the layout and the shader can never
+   disagree about how big the disc is inside its canvas. */
+const float DISC = ${SUN_DISC_FRACTION.toFixed(3)};
 
 float hash(vec3 p) {
   p = fract(p * 0.3183099 + vec3(0.71, 0.113, 0.419));
@@ -217,8 +225,9 @@ function compile(
 }
 
 /** Upper bound on the backing store. The sun is a soft object, so upscaling a
- *  smaller buffer is invisible and keeps integrated GPUs at 60fps. */
-const MAX_BUFFER = 680;
+ *  smaller buffer is nearly invisible while keeping integrated GPUs at 60fps.
+ *  Raised alongside the larger hero sun so granulation stays legible. */
+const MAX_BUFFER = 900;
 
 export function SolarCore({ className }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -284,18 +293,24 @@ export function SolarCore({ className }: { className?: string }) {
     let height = 0;
 
     function resize() {
-      const rect = canvas!.getBoundingClientRect();
-      if (rect.width === 0 || rect.height === 0) return;
+      // offsetWidth/Height report the layout box. getBoundingClientRect would
+      // report the *transformed* box, and the scene animates this element from
+      // scale 0.62 — sizing the backing store from that leaves the sun stuck at
+      // ~60% resolution, because ResizeObserver never fires again (the layout
+      // box never changed).
+      const layoutWidth = canvas!.offsetWidth;
+      const layoutHeight = canvas!.offsetHeight;
+      if (layoutWidth === 0 || layoutHeight === 0) return;
 
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const scale = Math.min(
         1,
-        MAX_BUFFER / (Math.max(rect.width, rect.height) * dpr),
+        MAX_BUFFER / (Math.max(layoutWidth, layoutHeight) * dpr),
       );
 
       const next = {
-        w: Math.max(1, Math.round(rect.width * dpr * scale)),
-        h: Math.max(1, Math.round(rect.height * dpr * scale)),
+        w: Math.max(1, Math.round(layoutWidth * dpr * scale)),
+        h: Math.max(1, Math.round(layoutHeight * dpr * scale)),
       };
 
       if (next.w === width && next.h === height) return;

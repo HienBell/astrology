@@ -6,7 +6,7 @@
  */
 import puppeteer from "puppeteer-core";
 
-const BASE = process.env.BASE_URL ?? "http://localhost:3947";
+const BASE = process.env.BASE_URL ?? "http://localhost:3000";
 
 const browser = await puppeteer.launch({
   executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
@@ -37,6 +37,44 @@ const scene = await page.evaluate(() => {
 });
 console.log(`sun renderer: ${scene.canvases === 1 && scene.fallbackImages === 0
   ? "WebGL shader ✓" : `FALLBACK (canvases=${scene.canvases}, imgs=${scene.fallbackImages})`}`);
+
+// --- Layout: the disc must not be sliced by an ancestor, and the oversized
+//     art must not introduce a horizontal scrollbar or break the sticky header.
+const layout = await page.evaluate(() => {
+  const DISC = 0.56;
+  const s = document.querySelector('[data-celestial-scene="solar"]')!;
+  const c = s.querySelector("canvas") as HTMLCanvasElement;
+  const r = c.getBoundingClientRect();
+  const clippers: string[] = [];
+  let el: HTMLElement | null = c.parentElement;
+  while (el) {
+    const cs = getComputedStyle(el);
+    if (cs.overflowX !== "visible" || cs.overflowY !== "visible")
+      clippers.push(`${el.tagName}:${cs.overflowX}/${cs.overflowY}`);
+    el = el.parentElement;
+  }
+  const h1 = document.querySelector("h1")!.getBoundingClientRect();
+  const disc = Math.min(r.width, r.height) * DISC;
+  const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+  const nx = Math.max(h1.left, Math.min(cx, h1.right));
+  const ny = Math.max(h1.top, Math.min(cy, h1.bottom));
+  return {
+    disc: Math.round(disc),
+    buffer: `${c.width}x${c.height}`,
+    // A backing store far below the layout box means resize() measured a
+    // transformed rect again.
+    bufferRatio: +(c.width / Math.max(1, c.offsetWidth)).toFixed(2),
+    clippers,
+    overlapsHeading: Math.hypot(cx - nx, cy - ny) < disc / 2,
+    hScroll: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+    headerPosition: getComputedStyle(document.querySelector("header")!).position,
+  };
+});
+console.log(`sun disc: ${layout.disc}px, backing store ${layout.buffer} (${layout.bufferRatio}x layout) ${layout.bufferRatio >= 0.9 ? "✓" : "✗ under-resolved"}`);
+console.log(`clipping ancestors: ${layout.clippers.length ? layout.clippers.join(", ") : "none"} ${layout.clippers.every((c) => c.startsWith("MAIN")) ? "✓" : "✗ disc may be sliced"}`);
+console.log(`disc clear of <h1>: ${layout.overlapsHeading ? "NO ✗" : "yes ✓"}`);
+console.log(`horizontal scrollbar: ${layout.hScroll ? "PRESENT ✗" : "none ✓"}`);
+console.log(`sticky header: ${layout.headerPosition} ${layout.headerPosition === "sticky" ? "✓" : "✗"}`);
 
 // --- The photosphere must churn between frames.
 const element = (await page.$('[data-celestial-scene="solar"]'))!;
