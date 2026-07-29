@@ -36,7 +36,7 @@ const SCENES: Record<CelestialVariant, CelestialBody[]> = {
          At these numbers the disc is roughly the height of the scene box and
          the corona spills past every edge. */
       className:
-        "-left-[30%] -top-[32%] h-[164%] w-[164%] sm:-left-[26%] lg:-left-[22%]",
+        "-left-[17%] -top-[17%] h-[134%] w-[134%] sm:-left-[14%] lg:-left-[10%]",
       delay: 0,
       float: 10,
       duration: 9,

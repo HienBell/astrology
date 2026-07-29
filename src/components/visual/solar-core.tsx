@@ -101,7 +101,7 @@ vec3 plasmaRamp(float h) {
   vec3 ember  = vec3(0.92, 0.24,  0.03);
   vec3 flame  = vec3(1.00, 0.58,  0.10);
   vec3 gold   = vec3(1.00, 0.85,  0.42);
-  vec3 white  = vec3(1.00, 0.98,  0.90);
+  vec3 white  = vec3(1.00, 0.94,  0.76);
 
   vec3 c = mix(deep,  ember, smoothstep(0.00, 0.30, h));
   c      = mix(c,     flame, smoothstep(0.28, 0.55, h));
@@ -145,7 +145,7 @@ void main() {
 
     // Limb darkening — the classic photosphere falloff toward the edge.
     float mu = z;
-    heat *= 0.42 + 0.72 * pow(mu, 0.55);
+    heat *= 0.40 + 0.66 * pow(mu, 0.55);
 
     colour = plasmaRamp(heat);
 
@@ -202,7 +202,7 @@ void main() {
   }
 
   // Gentle bloom lift near the limb where the eye expects glare.
-  colour += vec3(1.0, 0.62, 0.22) * exp(-abs(rn - 1.0) * 7.0) * 0.22;
+  colour += vec3(1.0, 0.62, 0.22) * exp(-abs(rn - 1.0) * 7.0) * 0.15;
 
   float alpha = clamp(max(max(colour.r, colour.g), colour.b), 0.0, 1.0);
   fragColor = vec4(colour, alpha);
