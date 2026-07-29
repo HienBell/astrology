@@ -12,7 +12,9 @@
     "verify:reading": "tsx scripts/verify-reading.mts",
     "verify:distribution": "tsx scripts/verify-distribution.mts",
     "verify:e2e": "tsx scripts/e2e-check.mts",
-    "verify:visuals": "tsx scripts/verify-visuals.mts"
+    "verify:visuals": "tsx scripts/verify-visuals.mts",
+    "verify:ascendant": "tsx scripts/verify-ascendant.mts",
+    "verify:reference": "tsx scripts/verify-against-reference.mts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",
